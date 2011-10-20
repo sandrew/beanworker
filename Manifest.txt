@@ -1,0 +1,6 @@
+History.txt
+Manifest.txt
+README.rdoc
+Rakefile
+lib/beanworker.rb
+lib/beanworker/worker.rb

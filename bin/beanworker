@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+if ARGV[0] == '-h' || ARGV[0] == '--help'
+  abort 'beanworker <jobs.rb> <host:port|path/to/file.yml> [-d|--daemonize] [-m|--monitor] [-P|--pid <path/to/pid/dir>]'
+end
+
+if ARGV[0] == '-v' || ARGV[0] == '--version'
+  abort Beanworker::VERSION
+end
+
+opts = {
+    daemonize:  ARGV.include?('-d') || ARGV.include?('--daemonize'),
+    monitor:    ARGV.include?('-m') || ARGV.include?('--monitor'),
+    pid_dir:    (i = ARGV.index('-P') || ARGV.index('--pid')) ? File.expand_path(ARGV[i+1], Dir.pwd) : './',
+    jobs_file:  File.expand_path(ARGV[0], Dir.pwd)
+}
+
+conn_file = File.expand_path(ARGV[1], Dir.pwd)
+File.file?(conn_file) ? opts[:connection_file] = conn_file : opts[:connection_host] = ARGV[1]
+
+trap('INT') do
+  puts 'Exiting'
+  exit
+end
+
+
+require File.expand_path('../../lib/beanworker', __FILE__)
+Beanworker.run opts
