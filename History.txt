@@ -1,3 +1,10 @@
+=== 0.0.2 2011-10-24
+
+* 1 major enhancement:
+  * added 'beanworker' in bin
+* 1 minor enhancement:
+  added DSL sample to README
+
 === 0.0.1 2011-10-20
 
 * 1 major enhancement:

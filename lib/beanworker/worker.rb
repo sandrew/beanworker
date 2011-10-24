@@ -1,5 +1,6 @@
 #coding: utf-8
 require 'timeout'
+require 'time'
 require 'pry'
 
 module Beanworker
@@ -15,6 +16,22 @@ module Beanworker
         end
       end
     end
+
+    def schedule(name, frequency, opts={}, *args)
+      at = make_first_schedule(frequency, opts[:at])
+      timeout_secs = [opts[:timeout] || frequency, frequency-5].min
+      Thread.new do
+        loop do
+          sleep(at - Time.now)
+          Timeout.timeout timeout_secs do
+            self.send(name, *args)
+          end
+          at += frequency
+        end
+      end
+    end
+
+    private
 
     def get_one_job(connection)
       job = connection.reserve
@@ -46,6 +63,15 @@ module Beanworker
 
     def fork_default(val)
       @need_fork = val
+    end
+
+    def make_first_schedule(frequency, at)
+      if at && (frequency % (24*3600) == 0)
+        t = Time.parse at
+        t > Time.now ? t : (t + 24*3600)
+      else
+        Time.now + frequency
+      end
     end
   end
 end

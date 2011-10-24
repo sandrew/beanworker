@@ -21,6 +21,40 @@ beanstalk-client
 -P|--pid       - path to the directory, where pid-file(s) will be saved, default is current directory
 
 == DSL
+jobs.rb:
+
+    class SomeWorker
+      extend Beanworker::Worker
+
+      class << self
+        def some_job(args={})
+          do_somethin_slow_with(args)
+        end
+
+        def another_job(args={})
+          do_something
+        end
+      end
+    end
+
+    class AnotherWorker
+      extend Beanworker::Worker
+
+      class << self
+        def scheduled_job(args={})
+          do_somethin_slow_with(args)
+        end
+      end
+
+      schedule :scheduled_job, 2*24*3600, at: '04:30', timeout: 3600, { param1: 'some_value' }
+    end
+
+    SlowWorker.perform    2, :some_job.
+                             :another_job
+
+    AnotherWorker.perform 1, :scheduled_jov
+
+== API:
 
 TODO
 

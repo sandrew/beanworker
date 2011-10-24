@@ -4,7 +4,7 @@ require 'beanqueue'
 require File.dirname(__FILE__) + '/beanworker/worker'
 
 module Beanworker
-  VERSION = '0.0.1'
+  VERSION = '0.0.2'
 
   class << self
     attr_accessor :connection_config
