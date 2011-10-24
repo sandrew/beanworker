@@ -49,7 +49,9 @@ jobs.rb:
       schedule :scheduled_job, 2*24*3600, at: '04:30', timeout: 3600, { param1: 'some_value' }
     end
 
-    SlowWorker.perform    2, :some_job.
+    SomeWorker.logger =  AnotherWorker.logger = Logger.new('/var/log/somelog.log')
+
+    SomeWorker.perform    2, :some_job.
                              :another_job
 
     AnotherWorker.perform 1, :scheduled_jov
