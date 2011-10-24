@@ -40,14 +40,14 @@ module Beanworker
 
     def get_one_job(connection)
       job = connection.reserve
-      name, args = job.stats['tube'].gsub('.', '_'), job.ybody
+      name, args = job.stats['tube'].gsub('.', '_'), [job.ybody]
       need_fork = args.delete('__fork__')
       work_job(name, job.ttr, args, need_fork.nil? ? @need_fork : need_fork)
       job.delete
     rescue SystemExit
       raise
     rescue => e
-      logger.error e.backtrace.unshift(e.message)
+      logger.error e.backtrace.unshift(e.message).join("\n")
       job.bury rescue nil
     end
 
@@ -65,7 +65,7 @@ module Beanworker
 
     def work_with_timeout(name, ttr, args)
       Timeout::timeout(ttr - 1) do
-        self.send(name, args)
+        self.send(name, *args)
       end
     end
 

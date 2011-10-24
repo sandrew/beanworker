@@ -5,7 +5,7 @@ require 'logger'
 require File.dirname(__FILE__) + '/beanworker/worker'
 
 module Beanworker
-  VERSION = '0.0.4'
+  VERSION = '0.0.5'
 
   class << self
     attr_accessor :connection_config

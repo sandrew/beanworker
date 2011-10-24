@@ -1,3 +1,9 @@
+=== 0.0.5 2011-10-24
+
+* 2 minor enhancements:
+  * bug in parameters for scheduled job
+  * better output on catched error
+
 === 0.0.4 2011-10-24
 
 * 1 minor enhancement:
