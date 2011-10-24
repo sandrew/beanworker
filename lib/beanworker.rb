@@ -1,10 +1,11 @@
 #coding: utf-8
 require 'daemons'
 require 'beanqueue'
+require 'logger'
 require File.dirname(__FILE__) + '/beanworker/worker'
 
 module Beanworker
-  VERSION = '0.0.3'
+  VERSION = '0.0.4'
 
   class << self
     attr_accessor :connection_config
@@ -20,7 +21,7 @@ module Beanworker
       end
     end
 
-    def run_loop(opts)
+    def run_loop(opts={})
       require opts[:jobs_file]
       loop { gets } unless opts[:no_wait]
     end

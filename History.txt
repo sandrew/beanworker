@@ -1,3 +1,8 @@
+=== 0.0.4 2011-10-24
+
+* 1 minor enhancement:
+  * moar logging
+
 === 0.0.3 2011-10-24
 
 * 1 major enhancement:

@@ -10,7 +10,7 @@ module Beanworker
         Thread.new do
           connection = Beanqueue.connect Beanworker.connection_config
           tubes.each { |tube| connection.watch(tube.to_s.gsub('_', '.')) }
-          logger.info("Listening: #{tubes.inspect}") if logger
+          logger.info "Listening: #{tubes.inspect}"
           loop do
             get_one_job connection
           end
@@ -47,11 +47,12 @@ module Beanworker
     rescue SystemExit
       raise
     rescue => e
-      logger.error(e.backtrace.unshift(e.message)) if logger
+      logger.error e.backtrace.unshift(e.message)
       job.bury rescue nil
     end
 
     def work_job(name, ttr, args, need_fork=false)
+      logger.info "Starting #{name} with #{args.inspect}"
       if need_fork
         Process.wait(Process.fork do
           work_with_timeout(name, ttr, args)
@@ -59,6 +60,7 @@ module Beanworker
       else
         work_with_timeout(name, ttr, args)
       end
+      logger.info "Finished #{name} with #{args.inspect}"
     end
 
     def work_with_timeout(name, ttr, args)
